@@ -1,97 +1,71 @@
-# 🧪 Materials Engineering and Machine Learning Synthesis for Non-Destructive Chemical State Assessment (M-LENS)
+# 🧪 Polymer Curing Monitoring with ESP32 and Fermion Sensors
 
 ## Project Overview
-**M-LENS (Materials-informed Localised Electronic Nose System)** is an interdisciplinary project that bridges **Materials Engineering**, **low-cost Electronics**, and **Machine Learning (ML)** to perform non-destructive, real-time chemical state monitoring of materials.
+This project uses an **ESP32 microcontroller** combined with a **3-sensor Fermion MEMS array** to non-destructively monitor the curing state of polymeric materials such as **epoxy** and **silicone**.  
 
-The aim is to demonstrate that the curing state or early degradation of a polymeric material can be accurately classified by analysing the unique chemical "fingerprint" of its volatile organic compound (VOC) emissions using a simple array of **Metal-Oxide Semiconductor (MOS)** gas sensors (an "Electronic Nose").
-
-This project showcases expertise in:
-- **Materials Characterisation**: Understanding material kinetics and chemical pathways that lead to VOC release.
-- **Low-Cost Electronics**: Interfacing analogue sensors with digital microcontrollers for reliable data acquisition.
-- **Machine Learning/Deep Learning**: Implementing predictive classification models for multi-dimensional sensor data.
+By analysing the chemical fingerprint of VOC emissions during curing, the system can classify the material’s state in **real-time** without contact or sample destruction.
 
 ---
 
-## 1. Materials Engineering Principle
-The foundation of this project relies on **Material Curing Kinetics** and **Chemical Off-Gassing**.
+## Selected Sensor Array
+The hardware supports three MEMS sensors, optimised for polymer curing detection:
 
-When a thermoset polymer (such as epoxy or silicone) cures, it undergoes a chemical reaction (polymerisation and cross-linking) that converts it from a liquid to a solid. During this process, or as it begins to degrade, it releases specific VOCs.
+| Sensor | Target | Role |
+|--------|--------|------|
+| Alcohol / Ketone Sensor | Ethanol, Acetone | Tracks VOCs released during initial curing phase |
+| Formaldehyde (HCHO) Sensor | Aldehydes, amines | Detects curing agents and early chemical reactions |
+| VOC / MQ-135 Type Sensor | Miscellaneous organics | Captures residual VOCs for full chemical fingerprint |
 
-- **The Signature**: The concentration and composition of these VOCs change predictably as the reaction progresses. An array of non-specific MOS sensors provides a unique multi-dimensional signal (a "chemical fingerprint") at each stage of the material's life.  
-- **The Metric (Feature)**: The primary feature extracted from the sensors is the normalised resistance ratio:
-
-\[
-R_S / R_0
-\]
-
-Where:  
-- \(R_S\): Sensor resistance in the presence of the Material Under Test (MUT).  
-- \(R_0\): Sensor resistance in clean air (baseline).  
-
-By tracking the vector of \(R_S / R_0\) values across the sensor array over time, we capture the transition of the material's chemical state.
+> Together, these sensors provide a **multi-dimensional signal** suitable for machine learning classification.
 
 ---
 
-## 2. Hardware and Electronics Setup
-The sensor array and data logger are designed for **simplicity and low power consumption** (although the ML model is run offline in this demonstration).
+## Hardware Setup
+- **ESP32 Microcontroller**: Reads analog sensor outputs, logs data, and streams if needed.  
+- **Test Chamber**: Small, sealed container (e.g., 500 mL) to accumulate VOCs.  
+- **Power Supply**: Stable 5V for sensors and ESP32.  
+- **Data Logging**: SD card or Wi-Fi streaming for recorded VOC patterns.
 
-### Required Components
-
-| Component        | Purpose                      | Notes                                                                 |
-|------------------|------------------------------|----------------------------------------------------------------------|
-| **Microcontroller** | Data acquisition and logging. | ESP32 or similar with Wi-Fi capability for straightforward data streaming. |
-| **Sensor Array (E-Nose)** | Chemical "fingerprinting." | 3–4 distinct MOS gas sensors (e.g., MQ-2, MQ-3, MQ-7, MQ-135).        |
-| **Test Chamber** | Controlled environment for VOC concentration. | Small, sealed plastic container (e.g., 500 mL volume).                 |
-| **Material Under Test (MUT)** | The material being monitored. | Two-part epoxy resin or common silicone sealant.                       |
-| **Power Supply** | Powering microcontroller & sensors. | Reliable 5 V source.                                                   |
+**Wiring Notes**:
+- Connect each sensor output to an **analog input** on the ESP32.  
+- Include baseline readings in clean air for normalisation.  
+- Maintain stable temperature and humidity for consistent readings.
 
 ---
 
-### Data Acquisition Flow
-1. Each MOS sensor is connected to an **analogue input (ADC)** pin on the ESP32 via a simple voltage divider.  
-2. The ESP32 reads the voltage \(V_{OUT}\) across the load resistor, which allows calculation of the sensor’s internal resistance \(R_S\).  
-3. The microcontroller logs the \(R_S\) values for all sensors every \(T_{sample}\) seconds, along with timestamps.  
-4. Data is streamed wirelessly via **Wi-Fi** to a host PC, or written to an **SD card** for offline analysis.  
+## Software and Data Pipeline
+1. **Sensor Readings**
+   - Acquire analog voltages every 1–5 seconds.  
+   - Convert to resistance ratios or normalised voltages relative to baseline.
+
+2. **Data Preprocessing**
+   - Normalize each sensor output: \( R_S / R_0 \) or scaled voltage.  
+   - Optional: apply moving average for noise reduction.
+
+3. **Machine Learning Classification**
+   - Multi-class classification: `[Uncured, Transition, Fully Cured, Degrading]`.  
+   - Algorithms:
+     - Baseline: **Support Vector Machine (SVM)** or **Random Forest**  
+     - Deep Learning: **Feed-Forward Neural Network (FNN)** for complex patterns  
+
+4. **Output**
+   - Real-time display on OLED or logging to SD card.  
+   - Optional alerts when material reaches specific curing state.
 
 ---
 
-## 3. Data Acquisition & ML/DL Pipeline
-
-### 3.1 Data Collection Strategy
-The system requires **labelled data** representing different material states:
-
-| State Label | Description              | Data Collection Method |
-|-------------|--------------------------|-------------------------|
-| **State 1: Liquid/Uncured** | Initial mixing phase. | Log data for the first hour post-mixing. |
-| **State 2: Gelling/Transition** | Viscosity rapidly increasing. | Log data between 1–5 hours post-mixing. |
-| **State 3: Fully Cured/Stable** | Final solid state (Endpoint). | Log data after 24 hours, continuing for several days. |
-| **State 4: Degradation** | Simulated failure state. | Expose a fully cured sample to mild heat/chemical stress and log the new fingerprint. |
+## Usage Notes
+- Allow **sensor warm-up** before logging (e.g., 30 min).  
+- Use a **small sealed chamber** to concentrate VOCs.  
+- **Calibrate baseline readings** in clean air.  
+- **Machine learning is recommended**; single sensor trends may be insufficient for accurate classification.
 
 ---
 
-### 3.2 Machine Learning Implementation
-The objective is a **Multi-Class Classification task**:  
+## References
+- Materials-informed Localised Electronic Nose System (M-LENS) methodology.  
+- VOC emissions in epoxy and silicone curing: chemical kinetics literature.  
+- Fermion sensor datasheets for voltage-to-gas response characteristics.
 
-> Given a sensor vector  
-> \[
-> X = [R_S/R_0 (MQ2), R_S/R_0 (MQ3), ...]
-> \]  
-> Predict the corresponding **State Label**.
-
-#### Toolkit
-- **Language**: Python  
-- **Libraries**: `pandas`, `numpy`, `scikit-learn` (data preprocessing & training), `matplotlib` (visualisation), `TensorFlow/Keras` (optional deep learning).  
-
-#### Model Selection
-- **Preprocessing**: Normalise input features (e.g., `StandardScaler`).  
-- **Model 1 (Baseline)**:  
-  - Support Vector Machine (SVM)  
-  - Random Forest Classifier  
-  (Well-suited for small, structured datasets).  
-- **Model 2 (Deep Learning Showcase)**:  
-  - Feed-Forward Neural Network (FNN)  
-  - Learns **non-linear decision boundaries** between material states in multi-dimensional sensor space.  
-
----
 
 
