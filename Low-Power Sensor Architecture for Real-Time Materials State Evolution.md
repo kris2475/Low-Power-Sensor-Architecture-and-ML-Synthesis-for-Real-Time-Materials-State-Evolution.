@@ -17,7 +17,7 @@ During the gaps between inspections, critical events such as:
 ### 2. The Cost of Maintenance
 Because maintenance is usually **time-based**, industries face two costly outcomes:
 - Premature replacement of components that are still functional  
-- Excessive labor from unnecessary manual inspections  
+- Excessive labour from unnecessary manual inspections  
 
 ### 3. The Inaccuracy of Modelling
 Degradation models built in **controlled lab settings** rarely reflect the randomness of **real-world stressors**.  
