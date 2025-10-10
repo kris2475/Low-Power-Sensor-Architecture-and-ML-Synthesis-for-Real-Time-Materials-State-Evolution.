@@ -5,6 +5,13 @@ This project uses an **ESP32 microcontroller** with a **BME680** and **EtOH, VOC
 
 By analyzing the **volatile organic compounds (VOCs)** and amine emissions produced during curing, combined with environmental context from the BME680, the system can **non-destructively classify the material’s curing stage in real-time**.
 
+**Experimental workflow includes:**
+1. **24-hour burn-in** of the sensor system (all data logged).  
+2. **24-hour baseline measurement** in clean air (all data logged).  
+3. **24-hour cure monitoring** of **RS Pro Structural Epoxy Adhesive, part number 918-1401** (all data logged).  
+
+All tests are conducted at **ambient room temperature**, which is recorded alongside sensor data.
+
 ---
 
 ## Selected Sensor Array
@@ -28,7 +35,24 @@ By analyzing the **volatile organic compounds (VOCs)** and amine emissions produ
 **Wiring Notes:**
 - Each analog sensor (EtOH, VOC, NH₃) connects to an ESP32 analog input.  
 - BME680 communicates over I2C (SDA/SCL).  
-- Take baseline readings in **clean air** before starting experiments.
+- Baseline readings should be collected in **clean air** before starting experiments.  
+
+---
+
+## Experimental Procedure
+
+1. **24-Hour Burn-In**
+   - Run all sensors continuously for 24 hours to stabilize responses.  
+   - Log all sensor readings and environmental data.  
+
+2. **24-Hour Baseline**
+   - Record sensor readings in **clean air** for 24 hours to establish baseline levels.  
+   - All data, including ambient room temperature, should be logged.  
+
+3. **24-Hour Cure Monitoring**
+   - Apply **RS Pro Structural Epoxy Adhesive, part number 918-1401** in the test chamber.  
+   - Monitor VOC, EtOH, NH₃, and BME680 environmental readings continuously.  
+   - Log all data to capture the full curing profile.  
 
 ---
 
@@ -59,7 +83,8 @@ By analyzing the **volatile organic compounds (VOCs)** and amine emissions produ
 - Allow **sensor warm-up** (~30 minutes for BME680 and MOX sensors).  
 - Keep the **chamber sealed** to concentrate VOCs and ammonia emissions.  
 - Calibrate baseline readings in clean air before experiments.  
-- For ML models, **collect sufficient labeled data** across all curing stages for accurate classification.
+- For ML models, **collect sufficient labeled data** across all curing stages for accurate classification.  
+- Ensure **ambient temperature logging** during all burn-in, baseline, and cure phases.
 
 ---
 
@@ -68,6 +93,7 @@ By analyzing the **volatile organic compounds (VOCs)** and amine emissions produ
 - EtOH, VOC, and NH₃ sensor datasheets for voltage-to-gas response.  
 - BME680 environmental sensing and gas resistance correction methodology.  
 - M-LENS methodology: Materials-informed Localized Electronic Nose System.
+
 
 
 
