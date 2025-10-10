@@ -10,7 +10,8 @@ By analyzing the **volatile organic compounds (VOCs)** and amine emissions produ
 2. **24-hour baseline measurement** in clean air (all data logged).  
 3. **24-hour cure monitoring** of **RS Pro Structural Epoxy Adhesive, part number 918-1401** (all data logged).  
 
-All tests are conducted at **ambient room temperature**, which is recorded alongside sensor data.
+All tests are conducted at **ambient room temperature**, which is recorded alongside sensor data.  
+**All runs were carried out in a sealed plastic container** to concentrate VOCs and ammonia emissions.
 
 ---
 
@@ -29,7 +30,7 @@ All tests are conducted at **ambient room temperature**, which is recorded along
 
 ## Hardware Setup
 - **ESP32 Microcontroller**: Reads analog sensor outputs and BME680 I2C data; logs data to SD card or streams via Wi-Fi.  
-- **Test Chamber**: Small, sealed container (e.g., 500 mL) to accumulate VOCs and amine emissions.  
+- **Test Chamber**: **Sealed plastic container** (e.g., 500 mL) to accumulate VOCs and amine emissions.  
 - **Power Supply**: Stable 5V for sensors and ESP32.  
 
 **Wiring Notes:**
@@ -50,7 +51,7 @@ All tests are conducted at **ambient room temperature**, which is recorded along
    - All data, including ambient room temperature, should be logged.  
 
 3. **24-Hour Cure Monitoring**
-   - Apply **RS Pro Structural Epoxy Adhesive, part number 918-1401** in the test chamber.  
+   - Apply **RS Pro Structural Epoxy Adhesive, part number 918-1401** in the **sealed plastic container**.  
    - Monitor VOC, EtOH, NH₃, and BME680 environmental readings continuously.  
    - Log all data to capture the full curing profile.  
 
@@ -93,6 +94,7 @@ All tests are conducted at **ambient room temperature**, which is recorded along
 - EtOH, VOC, and NH₃ sensor datasheets for voltage-to-gas response.  
 - BME680 environmental sensing and gas resistance correction methodology.  
 - M-LENS methodology: Materials-informed Localized Electronic Nose System.
+
 
 
 
